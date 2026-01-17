@@ -64,27 +64,33 @@ export const stripeWebhooks = async(request, response) => {
         event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     }
     catch (err) {
-        response.status(400).send(`Webhook Error: ${err.message}`);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
     
     // Handle the event
     switch (event.type) {
     case 'checkout.session.completed':{
-        const paymentIntent = event.data.object;
-        const paymentIntentId = paymentIntent.id;
-        const session = await stripeInstance.checkout.sessions.list({
-            payment_intent: paymentIntentId
-        })
-        const { purchaseId } = session.data[0].metadata;
+        // const paymentIntent = event.data.object;
+        // const paymentIntentId = paymentIntent.id;
+        // const session = await stripeInstance.checkout.sessions.list({
+        //     payment_intent: paymentIntentId
+        // })
+        // const { purchaseId } = session.metadata.purchaseId;
+        const session = event.data.object;
+        const purchaseId = session.metadata.purchaseId;
         const purchaseData = await Purchase.findById(purchaseId)
         const userData = await User.findById(purchaseData.userId)
         const courseData = await Course.findById(purchaseData.courseId.toString())
         
-        coursedData.enrolledStudents.push(userData)
-        await courseData.save() //updating in mongoDB
+        if (!courseData.enrolledStudents.includes(userData._id)) {
+            courseData.enrolledStudents.push(userData._id);
+            await courseData.save();
+        }
         
-        userData.enrolledCourses.push(courseData._id)
-        await userData.save() 
+        if (!userData.enrolledCourses.includes(courseData._id)) {
+            userData.enrolledCourses.push(courseData._id);
+            await userData.save();
+        }
         
         purchaseData.status = 'completed'
         await purchaseData.save()

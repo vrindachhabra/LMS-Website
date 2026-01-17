@@ -19,6 +19,9 @@ const app = express()
 await connectDB()
 await connectCloudinary()
 
+//Stripe webhook must be FIRST
+app.post('/stripe', express.raw({ type: 'application/json'}), stripeWebhooks)
+
 //middlewares
 app.use(cors())
 app.use(clerkMiddleware())
@@ -31,7 +34,6 @@ app.post('/clerk', express.json(), clerkWebHooks)
 app.use('/api/educator', express.json(), educatorRouter)
 app.use('/api/course', express.json(), courseRouter)
 app.use('/api/user', express.json(), userRouter)
-app.post('/stripe', express.raw({ type: 'application/json'}), stripeWebhooks)
 
 //getting port number from environment
 const PORT = process.env.PORT || 5000

@@ -1,5 +1,7 @@
 import {clerkClient} from '@clerk/express'
 import Course from '../models/Course.js'
+import Purchase from '../models/Purchase.js'
+import User from '../models/User.js'
 import {v2 as cloudinary} from 'cloudinary'
 
 //updating role to educator
@@ -32,6 +34,15 @@ export const addCourse = async (req, res) => {
         }
 
         const parsedCourseData = await JSON.parse(courseData)
+        // SANITIZE BOOLEAN VALUES
+        parsedCourseData.courseContent.forEach(chapter => {
+        chapter.chapterContent.forEach(lecture => {
+            lecture.isPreviewFree =
+            lecture.isPreviewFree === true ||
+            lecture.isPreviewFree === "true";
+        });
+        });
+
         parsedCourseData.educator = educatorId
 
         const newCourse = await Course.create(parsedCourseData)

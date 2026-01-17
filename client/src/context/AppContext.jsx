@@ -105,7 +105,7 @@ export const AppContextProvider = (props) => {
             if (!backendUrl) return;
             const token = await getToken();
             if (!token) return;
-            const { data } = await axios.get(backendUrl + "/api/user/enrolled-courses", {headers: {Authorization: `Bearer ${token}` }})
+            const { data } = await axios.get(backendUrl + "/api/user/my-enrollments", {headers: {Authorization: `Bearer ${token}` }})
             if(data.success){
                 setEnrolledCourses(data.enrolledCourses.reverse())
             }

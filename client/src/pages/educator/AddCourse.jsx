@@ -100,12 +100,21 @@ const AddCourse = () => {
       if(!image){
         toast.error('Thumbnail not selected')
       }
+      
+      const sanitizedChapters = chapters.map(chapter => ({
+        ...chapter,
+        chapterContent: chapter.chapterContent.map(lecture => ({
+          ...lecture,
+          isPreviewFree: Boolean(lecture.isPreviewFree)
+        }))
+      }));
+      
       const courseData = {
         courseTitle, 
         courseDescription: quillRef.current.root.innerHTML,
         coursePrice: Number(coursePrice),
         discount: Number(discount),
-        courseContent: chapters,
+        courseContent: sanitizedChapters,
       }
 
       const formData = new FormData()
@@ -225,7 +234,7 @@ const AddCourse = () => {
 
                   <div className='flex gap-2 my-4'>
                     <p>Is Preview Free?</p>
-                    <input type="checkbox" className='mt-1 scale-125' checked={lectureDetails.isPreviewFree} onChange={(e) => setLectureDetails({...lectureDetails, isPreviewFree : e.target.value})}/>
+                    <input type="checkbox" className='mt-1 scale-125' checked={lectureDetails.isPreviewFree} onChange={(e) => setLectureDetails({...lectureDetails, isPreviewFree : e.target.checked})}/>
                   </div>
 
                   <button type='button' className='w-full bg-blue-400 text-white px-4 py-2 rounded' onClick={addLecture}>Add</button>

@@ -3,6 +3,7 @@ import { AppContext } from '../../context/AppContext'
 import { Line } from 'rc-progress'
 import Footer from '../../components/student/Footer'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const MyEnrollments = () => {
   const {enrolledCourses, calculateCourseDuration, navigate, userData, fetchUserEnrolledCourses, backendUrl, getToken, calculateLectures} = useContext(AppContext)
@@ -30,7 +31,7 @@ const MyEnrollments = () => {
 
   useEffect(() => {
     if(userData){
-      fetchUserEnrolledCourses
+      fetchUserEnrolledCourses();
     }
   }, [userData])
 
