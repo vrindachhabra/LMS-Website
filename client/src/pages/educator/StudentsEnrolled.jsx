@@ -51,7 +51,7 @@ const StudentsEnrolled = () => {
                   <span className='truncate'>{item.student.name}</span>
                 </td>
                 <td className='px-4 py-3 truncate'>{item.courseTitle}</td>
-                <td className='px-4 py-3'>{new Date(item.purchseDate).toLocaleDateString()}</td>
+                <td className='px-4 py-3'>{new Date(item.purchaseDate).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>

@@ -24,8 +24,8 @@ export const AppContextProvider = (props) => {
     //Fetching all courses
     const fetchAllCourses = async() =>{
         try {
-            const token = await getToken();
-            if (!token) return;
+            // const token = await getToken();
+            // if (!token) return;
             if (!backendUrl) return;
             const { data } = await axios.get(
             backendUrl + "/api/course/all"
