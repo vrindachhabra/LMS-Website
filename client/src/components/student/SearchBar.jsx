@@ -3,11 +3,20 @@ import { assets } from '../../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { useState  } from 'react'
 
-const SearchBar = ({data}) => {
+const SearchBar = ({ data, onSearch }) => {
   const navigate = useNavigate()
   const [input, setInput] = useState(data ? data : '') //input is the current state, setInput is used to change the state
+
+  React.useEffect(() => {
+    setInput(data || '')
+  }, [data])
+
   const onSearchHandler = (e) =>{
     e.preventDefault()
+    if(onSearch){
+      onSearch(input)
+      return
+    }
     navigate('/course-list/' + input)
   }
   return (

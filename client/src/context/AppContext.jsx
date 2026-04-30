@@ -24,11 +24,9 @@ export const AppContextProvider = (props) => {
     //Fetching all courses
     const fetchAllCourses = async() =>{
         try {
-            // const token = await getToken();
-            // if (!token) return;
             if (!backendUrl) return;
             const { data } = await axios.get(
-            backendUrl + "/api/course/all"
+                backendUrl + "/api/course/all"
             );
             if(data.success){
                 setAllCourses(data.courses)
@@ -38,6 +36,51 @@ export const AppContextProvider = (props) => {
             }
         } catch (error) {
             toast.error(error.message)
+        }
+    }
+
+    const searchCourses = async (params = {}) => {
+        try {
+            if (!backendUrl) return [];
+            const { data } = await axios.get(backendUrl + "/api/course/search", { params });
+            if(data.success){
+                return data.courses
+            }
+            toast.error(data.message)
+            return []
+        } catch (error) {
+            toast.error(error.message)
+            return []
+        }
+    }
+
+    const fetchTopRatedCourses = async (params = {}) => {
+        try {
+            if (!backendUrl) return [];
+            const { data } = await axios.get(backendUrl + "/api/course/top-rated", { params });
+            if(data.success){
+                return data.courses
+            }
+            toast.error(data.message)
+            return []
+        } catch (error) {
+            toast.error(error.message)
+            return []
+        }
+    }
+
+    const fetchCoursesByThumbnail = async (hasThumbnail = true) => {
+        try {
+            if (!backendUrl) return [];
+            const { data } = await axios.get(backendUrl + "/api/course/with-thumbnail", { params: { hasThumbnail } });
+            if(data.success){
+                return data.courses
+            }
+            toast.error(data.message)
+            return []
+        } catch (error) {
+            toast.error(error.message)
+            return []
         }
     }
 
@@ -129,7 +172,26 @@ export const AppContextProvider = (props) => {
     }, [user])
 
     const value = {
-        currency, allCourses, navigate, calculateRating, isEducator, setIsEducator, calculateChapterTime, calculateCourseDuration, calculateLectures, enrolledCourses, setEnrolledCourses, fetchUserEnrolledCourses, backendUrl, userData, setUserData, getToken, fetchAllCourses
+        currency,
+        allCourses,
+        navigate,
+        calculateRating,
+        isEducator,
+        setIsEducator,
+        calculateChapterTime,
+        calculateCourseDuration,
+        calculateLectures,
+        enrolledCourses,
+        setEnrolledCourses,
+        fetchUserEnrolledCourses,
+        backendUrl,
+        userData,
+        setUserData,
+        getToken,
+        fetchAllCourses,
+        searchCourses,
+        fetchTopRatedCourses,
+        fetchCoursesByThumbnail
     }
     return (
         <AppContext.Provider value ={value}>
