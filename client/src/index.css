@@ -39,3 +39,42 @@
 .rich-text ul { margin-left: 30px; list-style-type: disc; }
 
 .rich-text li { margin-bottom: 8px; }
+
+/* Range Slider Styles */
+.thumb-min::-webkit-slider-thumb,
+.thumb-max::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+.thumb-min::-moz-range-thumb,
+.thumb-max::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+.thumb-min::-moz-range-track,
+.thumb-max::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+.thumb-min::-webkit-slider-runnable-track,
+.thumb-max::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 8px;
+}

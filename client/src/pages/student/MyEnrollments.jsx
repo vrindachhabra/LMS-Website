@@ -4,11 +4,14 @@ import { Line } from 'rc-progress'
 import Footer from '../../components/student/Footer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import RatingModal from '../../components/student/RatingModal'
 
 const MyEnrollments = () => {
   const {enrolledCourses, calculateCourseDuration, navigate, userData, fetchUserEnrolledCourses, backendUrl, getToken, calculateLectures} = useContext(AppContext)
 
   const [progressArray, setProgressArray] = useState([])
+  const [ratingModalOpen, setRatingModalOpen] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState(null)
 
   const getCourseProgress = async ()=> {
     try {
@@ -51,7 +54,7 @@ const MyEnrollments = () => {
             <th className='px-4 py-3 font-semibold truncate'>Course</th>
             <th className='px-4 py-3 font-semibold truncate'>Duration</th>
             <th className='px-4 py-3 font-semibold truncate'>Completed</th>
-            <th className='px-4 py-3 font-semibold truncate'>Status</th>
+            <th className='px-4 py-3 font-semibold truncate'>Action</th>
           </tr>
         </thead>
         <tbody className='text-gray-700'>
@@ -71,14 +74,37 @@ const MyEnrollments = () => {
                 {progressArray[index] && `${progressArray[index].lectureCompleted} / ${progressArray[index].totalLectures}`} <span>Lectures</span>
               </td>
               <td className='px-4 py-3 max-sm:text-right'>
-                <button className='px-3 sm:px-3 py-1 sm:py-2 bg-blue-600 max-sm:text-xs text-white rounded-md' onClick={() => navigate('/player/' + course._id)}>
-                  {progressArray[index] && progressArray[index].lectureCompleted/progressArray[index].totalLectures === 1 ? 'Completed' : 'Ongoing'}
-                </button>
+                <div className='flex gap-2 flex-col sm:flex-row'>
+                  <button className='px-3 sm:px-3 py-1 sm:py-2 bg-blue-600 max-sm:text-xs text-white rounded-md' onClick={() => navigate('/player/' + course._id)}>
+                    {progressArray[index] && progressArray[index].lectureCompleted/progressArray[index].totalLectures === 1 ? 'Completed' : 'Ongoing'}
+                  </button>
+                  <button 
+                    className='px-3 sm:px-3 py-1 sm:py-2 bg-yellow-600 max-sm:text-xs text-white rounded-md hover:bg-yellow-700'
+                    onClick={() => {
+                      setSelectedCourse(course)
+                      setRatingModalOpen(true)
+                    }}
+                  >
+                    Rate
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {selectedCourse && (
+        <RatingModal 
+          course={selectedCourse}
+          backendUrl={backendUrl}
+          getToken={getToken}
+          isOpen={ratingModalOpen}
+          onClose={() => setRatingModalOpen(false)}
+          onRatingSuccess={() => {
+            fetchUserEnrolledCourses()
+          }}
+        />
+      )}
     </div>
     <Footer />
     </>

@@ -9,6 +9,7 @@ import Footer from '../../components/student/Footer'
 import YouTube from 'react-youtube'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import RatingModal from '../../components/student/RatingModal'
 
 const CourseDetails = () => {
   const {id} = useParams()
@@ -16,7 +17,8 @@ const CourseDetails = () => {
   const [openSections, setOpenSections] = useState({})
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
   const [playerData, setPlayerData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
+  const [ratingModalOpen, setRatingModalOpen] = useState(false)
 
   const {allCourses, calculateRating, calculateLectures, calculateChapterTime, calculateCourseDuration, currency, backendUrl, userData, getToken} = useContext(AppContext)
 
@@ -133,6 +135,17 @@ const CourseDetails = () => {
         <div className='py-10 text-sm md:text-default'>
           <h3 className='text-xl font-semibold text-gray-800'>Course Description</h3>
           <p className='pt-3 rich-text' dangerouslySetInnerHTML={{__html : courseData.courseDescription}}></p>
+          {isAlreadyEnrolled && (
+            <div className='mt-8 pt-8 border-t border-gray-300'>
+              <h4 className='text-lg font-semibold text-gray-800 mb-4'>Rate this course</h4>
+              <button 
+                onClick={() => setRatingModalOpen(true)}
+                className='px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors'
+              >
+                ⭐ Leave a Rating
+              </button>
+            </div>
+          )}
         </div>
         </div>
         {/* right col  */}
@@ -189,6 +202,16 @@ const CourseDetails = () => {
         </div>
     </div>
     <Footer />
+    {courseData && (
+      <RatingModal 
+        course={courseData}
+        backendUrl={backendUrl}
+        getToken={getToken}
+        isOpen={ratingModalOpen}
+        onClose={() => setRatingModalOpen(false)}
+        onRatingSuccess={() => fetchCourseData()}
+      />
+    )}
     </>
   ) : <Loading />
 );

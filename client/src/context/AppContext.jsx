@@ -69,21 +69,6 @@ export const AppContextProvider = (props) => {
         }
     }
 
-    const fetchCoursesByThumbnail = async (hasThumbnail = true) => {
-        try {
-            if (!backendUrl) return [];
-            const { data } = await axios.get(backendUrl + "/api/course/with-thumbnail", { params: { hasThumbnail } });
-            if(data.success){
-                return data.courses
-            }
-            toast.error(data.message)
-            return []
-        } catch (error) {
-            toast.error(error.message)
-            return []
-        }
-    }
-
     // Fetch user data
     const fetchUserData = async () => {
         try {
@@ -190,8 +175,7 @@ export const AppContextProvider = (props) => {
         getToken,
         fetchAllCourses,
         searchCourses,
-        fetchTopRatedCourses,
-        fetchCoursesByThumbnail
+        fetchTopRatedCourses
     }
     return (
         <AppContext.Provider value ={value}>
