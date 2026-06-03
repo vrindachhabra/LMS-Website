@@ -2,9 +2,6 @@ Learning Management System (LMS)
 
 A full-stack Learning Management System built using the MERN stack with secure authentication, course management, video playback, progress tracking, and analytics features.
 
-Live Demo-
-https://lms-frontend-dun-two.vercel.app/
-
 Features-
 --User Authentication & Authorization
 --Course Creation & Management
